@@ -1,0 +1,254 @@
+<odoo>
+    <report
+        id="report_template"
+        model="openacademy.session"
+        string="Template Report"
+        name="openacademy.template_report_view"
+        file="openacademy.report_template"
+        report_type="qweb-pdf"
+		/>
+
+	<record id='report_template' model='ir.actions.report.xml'>
+		<field name='paperformat_id' ref='openacademy.report_paper'/>
+	</record>
+	
+    <template id="template_report_view">
+		<t t-call='report.html_container'>
+			<t t-foreach='docs' t-as='o'>
+				<div class="page">
+					<i>
+						Ngày in phiếu: <span t-esc="datetime.datetime.today().strftime('Ngày %d tháng %m năm %Y')"/>
+					</i>
+					<style type="text/css">
+						/******************************/
+						.page{
+							font-family: San-serif;
+							font-size: 14px;
+							margin-top: 0px;
+							size: A4;
+						}	
+						/******************************/
+						.head_info{
+							font-size: 18px;
+							font-weight: bold;
+						}	
+						/******************************/						
+						.title_info {
+							text-align:center
+						}
+						.title_info div div:first-child {
+							font-size: 23px;
+							font-family: San-serif;
+							font-weight: bolder;
+						}			
+						.title_info div div:nth-child(2) {
+							font-size: 15px;
+							font-style: italic;
+						}	
+						/******************************/	
+						table.basic_info {
+							width: 100%;
+							border: none;
+							text-align: left
+						}	
+						/******************************/
+						.moves_table tr {
+							page-break-inside: avoid;
+						}
+						.moves_table th {
+							border: 1px black solid;
+							text-align: center;
+							vertical-align: middle;
+							padding: 10px;
+							background:#ADABAB;
+						}
+						.moves_table td {
+							border: 1px black solid;
+							padding: 10px;
+						}
+						.moves_table td:first-child {
+							text-align: center;
+							vertical-align: middle;
+						}				
+					</style>
+					<div class='head_info'>
+						<div>
+							Công ty cổ phần Canifa <br/>
+							P.404, tầng 4, Tòa nhà GP Invest, 170 La Thành, P. Ô Chợ Dừa, Vietnam
+						</div>
+					</div>
+					<br/>
+					<div class='title_info'>
+						<div>
+							<div>Sessions</div>
+							<div><span t-esc="context_timestamp(datetime.datetime.strptime(o.create_date, '%Y-%m-%d %H:%M:%S')).strftime('Ngày %d tháng %m năm %Y')"/></div>
+						</div>
+					</div>
+					<br/>
+					<table class="basic_info">
+						<col style="width:23%"/>
+						<col style="width:77%"/>
+						<tr>
+							<td>Create user : </td>
+							<td><span t-esc="o.create_uid.name"/></td>
+						</tr>
+					</table>
+					<br/>
+					<table class='moves_table' width="100%">
+						<col style="width:10%"/>
+						<col style="width:20%"/>
+						<col style="width:30%"/>
+						<col style="width:40%"/>
+						<tr>
+							<th>No.</th>
+							<th>Name</th>
+							<th>Phone</th>
+							<th>Email</th>
+						</tr>
+						<t t-set="i" t-value="1"/>
+						<t t-foreach='o.attendee_ids.sorted(key=lambda rp: rp.name)' t-as='line'>
+							<tr>
+								<td><span t-esc="i"/></td>
+								<td><span t-field="line.name"/></td>
+								<td><span t-field="line.phone"/></td>
+								<td><span t-esc="line.email"/></td>
+							</tr>
+							<t t-set="i" t-value="i+1"/>
+						</t>
+					</table>
+					<br/>
+					<div style="text-align:right" >
+						<span class='cur_date' t-esc="time.strftime('Ngày %d tháng %m năm %Y')"/>
+					</div>
+				</div>
+			</t>
+		</t>
+    </template>
+	
+	<!--
+	<template id='canifa_plm_module.picking_report_template'>
+            <t t-call='report.html_container'>
+                <t t-foreach='docs' t-as='o'>
+                    <div class="oe_structure"/>
+                    <div class="page">
+                        <style>
+                            .page{
+                                margin-top: 0px;
+                                font-family: San-serif;
+                                font-size: 15px;
+                            }
+                            table.basic_info {
+                                width: 100%;
+                                border: none;
+                                text-align: left
+                            }
+                            .moves_table tr {
+                                page-break-inside: avoid;
+                            }
+                            .moves_table tr:last-child {
+                                font-weight: bold;
+                            }
+                            .moves_table tr:last-child td:first-child {
+                                text-align: left
+                            }
+                            .moves_table tr:last-child td:nth-child(2) {
+                                text-align: center
+                            }
+                            .moves_table th, 
+                            .moves_table td {
+                                border: 1px black solid;
+                            }
+                            .moves_table th {
+                                font-size: 18px;
+                                text-align: center;
+                                vertical-align: middle;
+                                padding: 10px
+                            }
+                            .moves_table td {
+                                padding: 0px 1px 1px 5px;
+                                text-align: center
+                            }
+                            .moves_table td:nth-child(2),
+                            .moves_table td:nth-child(3) {
+                                text-align: left;
+                            }
+                            .signature_spot {
+                                width: 100%;
+                                margin-left: 40px;
+                            }
+                        </style>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h4><strong><t t-esc="o.company_id.name"/></strong></h4>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="pull-right">
+                                    <div><strong>Số: <t t-esc="o.name"/></strong></div>
+                                    <t t-if="o.contract_account_analytic_id">
+                                        <div><strong>Hợp đồng: <t t-esc="o.contract_account_analytic_id.code"/></strong></div>
+                                    </t>
+                                    <div><strong>Trạng thái phiếu: </strong><b t-field="o.state"/></div>
+                                    <t t-if="o.queue_job_id">
+                                        <div><strong>Trạng thái Job: </strong><b t-field="o.queue_job_id.state"/></div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align: center;">
+                            <h4><strong>PHIẾU NHẶT HÀNG</strong></h4>
+                            <i>
+                                Ngày in phiếu: <span t-esc="datetime.datetime.today().strftime('Ngày %d tháng %m năm %Y')"/>
+                            </i>
+                        </div>
+                        <t t-if="o.pack_operation_product_ids">
+                            <table class='moves_table' width="100%">
+                                <col style="width:5%"/>
+                                <col style="width:25%"/>
+                                <col style="width:5%"/>
+                                <col style="width:10%"/>
+                                <col style="width:55%"/>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Mã hàng</th>
+                                    <th>ĐVT</th>
+                                    <th>SL cần nhặt</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                                <t t-set="i" t-value="1"/>
+                                <t t-set="total_todo" t-value="0"/>
+                                <t t-set="total_price" t-value="0"/>
+                                <t t-foreach='o.pack_operation_product_ids.sorted(key=lambda p: p.product_id.default_code)' t-as='line'>
+                                    <t t-set="todo" t-value="float(line.product_qty)"/>
+                                    <t t-if="todo > int(0)">
+                                        <t t-set="total_todo" t-value="total_todo+todo"/>
+                                        <tr>
+                                            <td><span t-esc="i"/></td>
+                                            <td><span t-field="line.product_id.default_code"/></td>
+                                            <td><span t-field="line.product_uom_id.name"/></td>                                            
+                                            <td><span t-esc="'{0:,.4f}'.format(todo)"/></td>
+                                            <td></td>
+                                        </tr>
+                                        <t t-set="i" t-value="i+1"/>
+                                    </t>
+                                </t>
+                                <tr>
+                                    <td colspan="3">Cộng</td>                                    
+                                    <td><span t-esc="'{0:,.4f}'.format(total_todo)"/></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table class="signature_spot">
+                                <tr>
+                                    <th>Người nhặt</th>
+                                    <th>Người đóng hàng</th>
+                                    <th>Thủ kho</th>
+                                </tr>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+		-->
+</odoo>

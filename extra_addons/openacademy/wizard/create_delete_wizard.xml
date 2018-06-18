@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="wizard_delete_form_view">
+			<field name="name">wizard.delete.form</field>
+			<field name="model">openacademy1.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Delete Session">
+					<p class="oe_grey">
+                        Delete Session?
+                    </p>
+					<footer>
+					   <button name="action_delete" type="object" string="Delete Session" class="oe_highlight"/>
+						or
+						<button special="cancel" string="Cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window id="delete_wizard"
+					name="Delete Session"
+					src_model="openacademy.course"
+					res_model="openacademy1.wizard"
+					view_mode="form"
+					target="new"
+					key2="client_action_multi"
+					view_id="wizard_delete_form_view"
+					/>
+	</data>
+	
+	<data>
+		<record model="ir.ui.view" id="wizard_create_form_view">
+			<field name="name">wizard.create.form</field>
+			<field name="model">openacademy1.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Create Session">
+					<p class="oe_grey">
+                        Create Session?
+                    </p>
+					<footer>
+					   <button name="action_create" type="object" string="Create Session" class="oe_highlight"/>
+						or
+						<button special="cancel" string="Cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window id="create_wizard"
+					name="Create Session"
+					src_model="openacademy.course"
+					res_model="openacademy1.wizard"
+					view_mode="form"
+					target="new"
+					key2="client_action_multi"
+					view_id="wizard_create_form_view"
+					/>
+	</data>
+</odoo>

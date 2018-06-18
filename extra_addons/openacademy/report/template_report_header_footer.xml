@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <template id="template_report_header">
+		<div class="header">
+			<div class="row">
+				<div class="col-xs-3">
+					<i>
+						Ngày in phiếu: <span t-esc="datetime.datetime.today().strftime('Ngày %d tháng %m năm %Y')"/>
+					</i>
+				</div>
+			</div>
+		</div>
+	</template>
+</odoo>

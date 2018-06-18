@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="import_wizard_form" model="ir.ui.view">
+            <field name="name">Import Wizard</field>
+            <field name="model">import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Import Wizard" >
+                    <group string="Choose Excel">
+                        <field name="name" filename='filename' required="1"/>
+                        <field name="filename" invisible="1"/>
+                    </group>
+                    <group attrs="{'invisible':[('error_file','=',False)]}">
+                        <field name="error_file_name" invisible="1" />
+                        <span style='color:red'>Errors occured during the import!</span>
+                        <field name="error_file" filename="error_file_name" nolabel="1"/>
+                    </group>
+                    <footer>
+                        <button name="create_import_wizard" string="Import" type="object" class="oe_highlight"/>
+                        OR
+                        <button string="Cancel" class="oe_link" special="cancel" type="object" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_import_wizard" model="ir.actions.act_window">
+            <field name="name">Import Wizard</field>
+            <field name="res_model">import.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="import_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Manufacturing > Master Data > Import Bill Of Materials -->
+        <menuitem id="import_wizard_menu"
+            parent="openacademy_menu"
+            name="Import Data"
+            action="action_import_wizard" />
+    </data>
+</odoo>
