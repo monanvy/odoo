@@ -60,11 +60,12 @@ class ImportWizard(models.TransientModel):
     @api.multi
     def import_data(self, _slice):
         Course = self.env['openacademy.course']
-        for data in _slice:
-            c = Course.search([
-                ('name', '=', data.get('name', False))
-                ])
-            if c:
-                c.write(data)
-            else:
-                c.create(data)
+        print _slice
+        # for data in _slice:
+        #     c = Course.search([
+        #         ('name', '=', data.get('name', False))
+        #         ])
+        #     if c:
+        #         c.write(data)
+        #     else:
+        #         c.create(data)
